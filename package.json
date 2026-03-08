@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "devto": "python3 \"$(git rev-parse --show-toplevel)/preprocess.py\" \"$INIT_CWD\""
+    "devto": "PATH=$PATH:/opt/homebrew/bin python3 \"$(git rev-parse --show-toplevel)/preprocess.py\" \"$INIT_CWD\""
   }
 }

@@ -4,6 +4,8 @@ from pathlib import Path
 from urllib.parse import quote, urlparse, unquote
 from urllib.request import urlretrieve
 from urllib.error import URLError
+import subprocess
+import tempfile
 
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/o5sy/blog/main"
 
@@ -43,14 +45,20 @@ def img_dir_github_url(input_path: Path) -> str:
 
 
 def download_external_image(src: str, img_dir: Path) -> str:
-    filename = Path(unquote(urlparse(src).path)).name
+    stem = Path(unquote(urlparse(src).path)).stem
+    filename = stem + ".png"
     dest = img_dir / filename
     if not dest.exists():
         try:
-            urlretrieve(src, dest)
-            print(f"  downloaded: {filename}")
-        except URLError as e:
-            print(f"  warning: failed to download {src} ({e})")
+            with tempfile.NamedTemporaryFile(suffix=".svg", delete=False) as tmp:
+                urlretrieve(src, tmp.name)
+                subprocess.run(
+                    ["rsvg-convert", "-f", "png", "-o", str(dest), tmp.name],
+                    check=True, capture_output=True
+                )
+            print(f"  converted svg→png: {filename}")
+        except Exception as e:
+            print(f"  warning: failed to convert {src} ({e})")
             return src
     return filename
 
