@@ -78,7 +78,7 @@ SSR 방식은 완성된 HTML을 응답하는 정적 SSR과 요청한 시점에 H
 <figcaption><a href="https://web.dev/articles/fcp?hl=ko">https://web.dev/articles/fcp?hl=ko</a></figcaption>
 
 - **LCP (Largest Contentful Paint)**: 페이지를 요청한 시점부터 주요 콘텐츠(가장 큰 이미지나 텍스트 블록)가 화면에 표시되는 시점까지의 시간
-![LCP](https://web.dev/static/articles/lcp/image/largest-contentful-paint-9b건c403e812154_1920.png?hl=ko)
+![LCP](https://web.dev/static/articles/lcp/image/largest-contentful-paint-9bc403e812154_1920.png?hl=ko)
 <figcaption><a href="https://web.dev/articles/lcp?hl=ko">https://web.dev/articles/lcp?hl=ko</a></figcaption>
 
 ### CSR과 SSR 지표 비교
