@@ -1,6 +1,9 @@
 import re
 import sys
 from pathlib import Path
+from urllib.parse import quote, urlparse, unquote
+from urllib.request import urlretrieve
+from urllib.error import URLError
 
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/o5sy/blog/main"
 
@@ -35,10 +38,24 @@ def resolve_input(arg) -> Path:
 def img_dir_github_url(input_path: Path) -> str:
     repo_root = Path(__file__).parent
     rel = input_path.parent.relative_to(repo_root)
-    return f"{GITHUB_RAW_BASE}/{rel}/img"
+    encoded = "/".join(quote(part) for part in rel.parts)
+    return f"{GITHUB_RAW_BASE}/{encoded}/img"
 
 
-def convert_figure(match, base_url: str) -> str:
+def download_external_image(src: str, img_dir: Path) -> str:
+    filename = Path(unquote(urlparse(src).path)).name
+    dest = img_dir / filename
+    if not dest.exists():
+        try:
+            urlretrieve(src, dest)
+            print(f"  downloaded: {filename}")
+        except URLError as e:
+            print(f"  warning: failed to download {src} ({e})")
+            return src
+    return filename
+
+
+def convert_figure(match, base_url: str, img_dir: Path) -> str:
     content = match.group(0)
 
     img_match = re.search(r'<img\s+src="([^"]+)"\s+alt="([^"]+)"\s*/>', content)
@@ -49,7 +66,16 @@ def convert_figure(match, base_url: str) -> str:
 
     src = img_match.group(1)
     alt = img_match.group(2)
-    result = f'![{alt}]({src})'
+
+    parsed_path = Path(unquote(urlparse(src).path))
+    if parsed_path.suffix.lower() == '.svg':
+        filename = download_external_image(src, img_dir)
+        if filename == src:  # download failed, keep original
+            result = f'![{alt}]({src})'
+        else:
+            result = f'![{alt}]({base_url}/{filename}?raw=true)'
+    else:
+        result = f'![{alt}]({src})'
 
     if figcaption_match:
         figcaption = figcaption_match.group(1).strip()
@@ -62,7 +88,7 @@ def convert_local_images(content: str, base_url: str) -> str:
     def replace(match):
         alt = match.group(1)
         filename = Path(match.group(2)).name
-        return f'![{alt}]({base_url}/{filename})'
+        return f'![{alt}]({base_url}/{filename}?raw=true)'
 
     return re.sub(r'!\[([^\]]*)\]\(\./img/([^)]+)\)', replace, content)
 
@@ -71,16 +97,23 @@ def main():
     arg = sys.argv[1] if len(sys.argv) > 1 else None
     input_path = resolve_input(arg)
     output_path = input_path.parent / "devto.md"
+    img_dir = input_path.parent / "img"
+    img_dir.mkdir(exist_ok=True)
 
     content = input_path.read_text(encoding='utf-8')
     base_url = img_dir_github_url(input_path)
 
+    content = re.sub(r'^#[^\n]+\n+', '', content)
+
     figure_pattern = re.compile(r'<figure>.*?</figure>', re.DOTALL)
-    content = figure_pattern.sub(lambda m: convert_figure(m, base_url), content)
+    content = figure_pattern.sub(lambda m: convert_figure(m, base_url, img_dir), content)
     content = convert_local_images(content, base_url)
 
     output_path.write_text(content, encoding='utf-8')
     print(f"✓ {output_path}")
+    print()
+    print("다운로드된 이미지가 있다면 push 후 devto.md URL이 유효해집니다:")
+    print("  git add web/ && git commit -m 'add: images' && git push")
 
 
 if __name__ == '__main__':
