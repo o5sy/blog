@@ -1,5 +1,3 @@
-# CSR vs SSR 속도 비교 (feat. Web Vitals)
-
 ## Introduction
 
 CSR의 단점을 설명할 때 빠지지 않는 내용이 있습니다.
@@ -54,7 +52,7 @@ SSR 방식은 완성된 HTML을 응답하는 정적 SSR과 요청한 시점에 H
 
 결론부터 말하면 기준에 따라 달라집니다.
 
-![주요 이벤트 타임라인 그래프](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_개념_정리/img/01.png)
+![주요 이벤트 타임라인 그래프](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_%EA%B0%9C%EB%85%90_%EC%A0%95%EB%A6%AC/img/01.png?raw=true)
 
 - 초기 로딩을 HTML 응답 ~ 화면 표시 시점으로 보면, JS 처리 시간이 소요되기 때문에 CSR이 SSR에 비해 느리다고 할 수 있습니다.
     - 일반적으로 말하는 초기 로딩이 이 구간에 해당한다고 볼 수 있습니다.
@@ -71,7 +69,7 @@ SSR 방식은 완성된 HTML을 응답하는 정적 SSR과 요청한 시점에 H
 이 글에서는 시간과 관련된 세가지 지표를 보겠습니다.
 
 - **TTFB (Time to First Byte)**: 페이지를 요청한 시점부터 서버 응답의 첫 번째 바이트를 받는 시점까지의 시간
-![TTFB](https://web.dev/articles/ttfb/image/performance-navigation-timing-timestamp-diagram.svg)
+![TTFB](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_%EA%B0%9C%EB%85%90_%EC%A0%95%EB%A6%AC/img/performance-navigation-timing-timestamp-diagram.png?raw=true)
 <figcaption>startTime와 responseStart 사이의 시간입니다.
         <a href="https://web.dev/articles/ttfb?hl=ko">https://web.dev/articles/ttfb?hl=ko</a></figcaption>
 
@@ -80,7 +78,7 @@ SSR 방식은 완성된 HTML을 응답하는 정적 SSR과 요청한 시점에 H
 <figcaption><a href="https://web.dev/articles/fcp?hl=ko">https://web.dev/articles/fcp?hl=ko</a></figcaption>
 
 - **LCP (Largest Contentful Paint)**: 페이지를 요청한 시점부터 주요 콘텐츠(가장 큰 이미지나 텍스트 블록)가 화면에 표시되는 시점까지의 시간
-![LCP](https://web.dev/static/articles/lcp/image/largest-contentful-paint-9bc403e812154_1920.png?hl=ko)
+![LCP](https://web.dev/static/articles/lcp/image/largest-contentful-paint-9b건c403e812154_1920.png?hl=ko)
 <figcaption><a href="https://web.dev/articles/lcp?hl=ko">https://web.dev/articles/lcp?hl=ko</a></figcaption>
 
 ### CSR과 SSR 지표 비교
@@ -100,8 +98,8 @@ SSR 방식은 완성된 HTML을 응답하는 정적 SSR과 요청한 시점에 H
 #### CSR
 
 
-![CSR LCP 퍼포먼스 타임라인](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_개념_정리/img/csr_lcp.png)
-![CSR 타임라인 그래프](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_개념_정리/img/02.png)
+![CSR LCP 퍼포먼스 타임라인](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_%EA%B0%9C%EB%85%90_%EC%A0%95%EB%A6%AC/img/csr_lcp.png?raw=true)
+![CSR 타임라인 그래프](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_%EA%B0%9C%EB%85%90_%EC%A0%95%EB%A6%AC/img/02.png?raw=true)
 
 | 지표 | 시간 | 설명 |
 |---|---|---|
@@ -115,8 +113,8 @@ TTFB가 매우 빠르고, FCP는 JS 처리 시간만큼, LCP는 API 지연까지
 
 #### SSR
 
-![SSR LCP 퍼포먼스 타임라인](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_개념_정리/img/ssr_lcp.png)
-![SSR 타임라인 그래프](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_개념_정리/img/03.png)
+![SSR LCP 퍼포먼스 타임라인](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_%EA%B0%9C%EB%85%90_%EC%A0%95%EB%A6%AC/img/ssr_lcp.png?raw=true)
+![SSR 타임라인 그래프](https://raw.githubusercontent.com/o5sy/blog/main/web/csr_vs_ssr/01_%EA%B0%9C%EB%85%90_%EC%A0%95%EB%A6%AC/img/03.png?raw=true)
 
 | 지표 | 시간 | 설명 |
 |---|---|---|
