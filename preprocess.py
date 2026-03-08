@@ -5,7 +5,7 @@ from pathlib import Path
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/o5sy/blog/main"
 
 
-def resolve_input(arg: str | None) -> Path:
+def resolve_input(arg) -> Path:
     if arg:
         p = Path(arg)
         if p.is_file():
